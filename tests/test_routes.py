@@ -1,9 +1,9 @@
 """
 Account API Service Test Suite
 
-Test cases can be run with the following:
-  nosetests -v --with-spec --spec-color
-  coverage report -m
+ Test cases can be run with the following:
+   nosetests -v --with-spec --spec-color
+   coverage report -m
 """
 import os
 import logging
@@ -22,12 +22,11 @@ BASE_URL = "/accounts"
 
 ######################################################################
 #  T E S T   C A S E S
-######################################################################
 class TestAccountService(TestCase):
     """Account Service Tests"""
 
     @classmethod
-    def setUpClass(cls):
+      def setUpClass(cls):
         """Run once before all tests"""
         app.config["TESTING"] = True
         app.config["DEBUG"] = False
