@@ -37,7 +37,10 @@ spec:
           value: $(params.branch)
       runAfter:
         - init
+<<<<<<< HEAD
 
+=======
+>>>>>>> 44f44b51f427cf644147a25392e3f7491c1af539
     - name: lint
       workspaces:
         - name: source
@@ -45,9 +48,16 @@ spec:
       taskRef:
         name: flake8
       params:
+<<<<<<< HEAD
         - name: image
           value: "python:3.9-slim"
         - name: args
           value: ["--count", "--max-complexity=10", "--max-line-length=127", "--statistics"]
+=======
+      - name: image
+        value: "python:3.9-slim"
+      - name: args
+        value: ["--count","--max-complexity=10","--max-line-length=127","--statistics"]
+>>>>>>> 44f44b51f427cf644147a25392e3f7491c1af539
       runAfter:
         - clone
