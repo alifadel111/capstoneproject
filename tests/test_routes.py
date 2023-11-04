@@ -5,6 +5,8 @@ from tests.factories import AccountFactory
 from service.common import status  # HTTP Status Codes
 from service.models import db, Account, init_db
 from service.routes import app
+import talisman
+
 
 DATABASE_URI = os.getenv(
     "DATABASE_URI", "postgresql://postgres:postgres@localhost:5432/postgres"
@@ -137,13 +139,23 @@ class TestAccountService(TestCase):
         self.assertEqual(len(data), 5)
 
     def test_update_account(self):
-        """It should Update an existing Account"""
-        # create an Account to update
-        test_account = AccountFactory()
-        resp = self.client.postApologies,
-    def test_cors_security(self):
-        """It should return a CORS header"""
-        response = self.client.get('/', environ_overrides=HTTPS_ENVIRON)
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
-        # Check for the CORS header
-        self.assertEqual(response.headers.get('Access-Control-Allow-Origin'), '*')
+     """It should Update an existing Account"""
+      account = self._create_accounts(1)[0]
+    
+      # Update the account with new data
+     updated_account = AccountFactory()
+     resp = self.client.put(
+        f"{BASE_URL}/{account.id}",
+        json=updated_account.serialize(),
+        content_type="application/json"
+    )
+    
+    self.assertEqual(resp.status_code, status.HTTP_200_OK)
+    
+    # Check if the account has been updated correctly
+    updated_account_data = resp.get_json()
+    self.assertEqual(updated_account_data["name"], updated_account.name)
+    self.assertEqual(updated_account_data["email"], updated_account.email)
+    self.assertEqual(updated_account_data["address"], updated_account.address)
+    self.assertEqual(updated_account_data["phone_number"], updated_account.phone_number)
+    self.assertEqual(updated_account_data["date_joined"], str(updated_account.date_joined))
