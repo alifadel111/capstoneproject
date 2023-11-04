@@ -38,7 +38,6 @@ spec:
       runAfter:
         - init
 <<<<<<< HEAD
-
 =======
 >>>>>>> 44f44b51f427cf644147a25392e3f7491c1af539
     - name: lint
