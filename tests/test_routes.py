@@ -5,7 +5,7 @@ from tests.factories import AccountFactory
 from service.common import status  # HTTP Status Codes
 from service.models import db, Account, init_db
 from service.routes import app
-import talisman
+from flsk import talisman
 
 
 DATABASE_URI = os.getenv(
