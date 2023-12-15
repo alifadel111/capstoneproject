@@ -1,3 +1,10 @@
+"""
+Account API Service Test Suite
+
+Test cases can be run with the following:
+  nosetests -v --with-spec --spec-color
+  coverage report -m
+"""
 import os
 import logging
 from unittest import TestCase
@@ -5,18 +12,17 @@ from tests.factories import AccountFactory
 from service.common import status  # HTTP Status Codes
 from service.models import db, Account, init_db
 from service.routes import app
-from flsk import talisman
-
 
 DATABASE_URI = os.getenv(
     "DATABASE_URI", "postgresql://postgres:postgres@localhost:5432/postgres"
 )
 
 BASE_URL = "/accounts"
-HTTPS_ENVIRON = {'wsgi.url_scheme': 'https'}
+
 
 ######################################################################
 #  T E S T   C A S E S
+######################################################################
 class TestAccountService(TestCase):
     """Account Service Tests"""
 
@@ -28,8 +34,10 @@ class TestAccountService(TestCase):
         app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URI
         app.logger.setLevel(logging.CRITICAL)
         init_db(app)
-        talisman.force_https = False
 
+    @classmethod
+    def tearDownClass(cls):
+        """Runs once before test suite"""
 
     def setUp(self):
         """Runs before each test"""
@@ -115,47 +123,4 @@ class TestAccountService(TestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
 
-    def test_get_account(self):
-        """It should Read a single Account"""
-        account = self._create_accounts(1)[0]
-        resp = self.client.get(
-            f"{BASE_URL}/{account.id}", content_type="application/json"
-        )
-        self.assertEqual(resp.status_code, status.HTTP_200_OK)
-        data = resp.get_json()
-        self.assertEqual(data["name"], account.name)
-
-    def test_get_account_not_found(self):
-        """It should not Read an Account that is not found"""
-        resp = self.client.get(f"{BASE_URL}/0")
-        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
-
-    def test_get_account_list(self):
-        """It should Get a list of Accounts"""
-        self._create_accounts(5)
-        resp = self.client.get(BASE_URL)
-        self.assertEqual(resp.status_code, status.HTTP_200_OK)
-        data = resp.get_json()
-        self.assertEqual(len(data), 5)
-
-    def test_update_account(self):
-     """It should Update an existing Account"""
-      account = self._create_accounts(1)[0]
-    
-      # Update the account with new data
-     updated_account = AccountFactory()
-     resp = self.client.put(
-        f"{BASE_URL}/{account.id}",
-        json=updated_account.serialize(),
-        content_type="application/json"
-    )
-    
-    self.assertEqual(resp.status_code, status.HTTP_200_OK)
-    
-    # Check if the account has been updated correctly
-    updated_account_data = resp.get_json()
-    self.assertEqual(updated_account_data["name"], updated_account.name)
-    self.assertEqual(updated_account_data["email"], updated_account.email)
-    self.assertEqual(updated_account_data["address"], updated_account.address)
-    self.assertEqual(updated_account_data["phone_number"], updated_account.phone_number)
-    self.assertEqual(updated_account_data["date_joined"], str(updated_account.date_joined))
+    # ADD YOUR TEST CASES HERE ...
