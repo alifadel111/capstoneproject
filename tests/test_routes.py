@@ -8,6 +8,7 @@ Test cases can be run with the following:
 import os
 import logging
 from unittest import TestCase
+from flask_cors import CORS
 from tests.factories import AccountFactory
 from service.common import status  # HTTP Status Codes
 from service.models import db, Account, init_db
